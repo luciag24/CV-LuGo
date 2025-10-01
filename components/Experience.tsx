@@ -41,7 +41,7 @@ export default function Experience({ isDarkMode }: ExperienceProps) {
       languages: ['Java'],
       image: '/images/bottlelogic.jpg',
       demoUrl: null,
-      demoGif: '/demos/bottlelogic-demo.gif',
+      demoGif: '/demos/BottleLogic-demo.gif',
       codeUrl: 'https://github.com/luciag24/bottlelogic',
       status: null
     },
