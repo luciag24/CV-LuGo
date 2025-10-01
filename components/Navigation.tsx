@@ -74,12 +74,6 @@ export default function Navigation({ activeSection, setActiveSection, isDarkMode
       
     } catch (error) {
       console.error('EmailJS Error:', error)
-      console.error('Error details:', {
-        serviceId,
-        templateId,
-        publicKey,
-        templateParams
-      })
       showToast(`Chyba pri odosielaní správy: ${error.message || 'Neznáma chyba'}`, 'error')
     } finally {
       setIsSubmitting(false)
