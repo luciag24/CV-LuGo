@@ -74,7 +74,8 @@ export default function Navigation({ activeSection, setActiveSection, isDarkMode
       
     } catch (error) {
       console.error('EmailJS Error:', error)
-      showToast(`Chyba pri odosielaní správy: ${error.message || 'Neznáma chyba'}`, 'error')
+      const errorMessage = error instanceof Error ? error.message : 'Neznáma chyba'
+      showToast(`Chyba pri odosielaní správy: ${errorMessage}`, 'error')
     } finally {
       setIsSubmitting(false)
     }
