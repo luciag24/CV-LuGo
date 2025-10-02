@@ -1,8 +1,11 @@
+import { useLanguage } from '../contexts/LanguageContext'
+
 interface HeroProps {
   isDarkMode: boolean
 }
 
 export default function Hero({ isDarkMode }: HeroProps) {
+  const { t } = useLanguage()
   return (
     <section className="pt-20 pb-4 md:pt-24 md:pb-6 text-center">
       <div className="max-w-4xl mx-auto px-4">
@@ -17,7 +20,7 @@ export default function Hero({ isDarkMode }: HeroProps) {
         
         {/* Titles */}
         <div className="text-sm sm:text-base md:text-lg bg-gradient-to-r from-rose-600 via-pink-600 to-violet-600 bg-clip-text text-transparent font-medium mb-3 md:mb-4 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-          <p>Java Developer | Backend & Web Applications</p>
+          <p>{t('hero.title')}</p>
         </div>
         
         {/* Description */}
@@ -25,7 +28,7 @@ export default function Hero({ isDarkMode }: HeroProps) {
           isDarkMode ? 'text-gray-300' : 'text-gray-600'
         }`} style={{ animationDelay: '0.4s' }}>
           <p>
-            Backend vývoj v Jave a Spring Boote je moja silná stránka. Skúsenosti mám aj s moderným frontendom (React, TypeScript, Next.js) a databázami (PostgreSQL, MySQL). Neustále sa učím nové technológie.
+            {t('hero.description')}
           </p>
         </div>
       </div>

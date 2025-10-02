@@ -1,41 +1,45 @@
+import { useLanguage } from '../contexts/LanguageContext'
+
 interface SkillsProps {
   isDarkMode: boolean
 }
 
 export default function Skills({ isDarkMode }: SkillsProps) {
+  const { t } = useLanguage()
   const skillCategories = [
     {
-      title: 'Backend - Moja špecializácia',
+      title: t('skills.backend'),
       color: 'primary',
       skills: [
-        { name: 'Java', progress: 95, experience: '13-14 mesiacov' },
-        { name: 'Spring Boot', progress: 90, experience: '12-13 mesiacov' },
-        { name: 'Maven/Gradle', progress: 85, experience: '11-12 mesiacov' },
-        { name: 'JUnit', progress: 80, experience: '10-11 mesiacov' },
-        { name: 'REST API', progress: 85, experience: '11-12 mesiacov' },
-        { name: 'Spring Security', progress: 70, experience: '8-9 mesiacov' },
+        { name: 'Java 8/11/17', progress: 95, experience: `13-14 ${t('skills.months')}` },
+        { name: 'Spring Boot', progress: 90, experience: `12-13 ${t('skills.months')}` },
+        { name: 'Maven/Gradle', progress: 85, experience: `11-12 ${t('skills.months')}` },
+        { name: 'JUnit', progress: 80, experience: `10-11 ${t('skills.months')}` },
+        { name: 'REST API', progress: 85, experience: `11-12 ${t('skills.months')}` },
+        { name: 'Spring Security', progress: 70, experience: `8-9 ${t('skills.months')}` },
       ]
     },
     {
-      title: 'Frontend - Podporné technológie',
+      title: t('skills.frontend'),
       color: 'orange',
       skills: [
-        { name: 'React', progress: 75, experience: '10-11 mesiacov' },
-        { name: 'TypeScript', progress: 70, experience: '9-10 mesiacov' },
-        { name: 'Next.js', progress: 65, experience: '8-9 mesiacov' },
-        { name: 'Tailwind CSS', progress: 60, experience: '7-8 mesiacov' },
-        { name: 'HTML/CSS', progress: 85, experience: '13-14 mesiacov' },
-        { name: 'JavaScript', progress: 80, experience: '11-12 mesiacov' },
+        { name: 'React', progress: 75, experience: `10-11 ${t('skills.months')}` },
+        { name: 'TypeScript', progress: 70, experience: `9-10 ${t('skills.months')}` },
+        { name: 'Next.js', progress: 65, experience: `8-9 ${t('skills.months')}` },
+        { name: 'Tailwind CSS', progress: 60, experience: `7-8 ${t('skills.months')}` },
+        { name: 'HTML/CSS', progress: 85, experience: `13-14 ${t('skills.months')}` },
+        { name: 'JavaScript', progress: 80, experience: `11-12 ${t('skills.months')}` },
       ]
     },
     {
-      title: 'Databázy a Nástroje',
+      title: t('skills.databases'),
       color: 'green',
       skills: [
-        { name: 'Git', progress: 85, experience: '11-12 mesiacov' },
-        { name: 'MySQL', progress: 75, experience: '10-11 mesiacov' },
-        { name: 'PostgreSQL', progress: 70, experience: '9-10 mesiacov' },
-        { name: 'IntelliJ IDEA', progress: 90, experience: '13-14 mesiacov' },
+        { name: 'Git', progress: 85, experience: `11-12 ${t('skills.months')}` },
+        { name: 'MySQL', progress: 75, experience: `10-11 ${t('skills.months')}` },
+        { name: 'PostgreSQL', progress: 70, experience: `9-10 ${t('skills.months')}` },
+        { name: 'Docker & Docker Compose', progress: 60, experience: `6-7 ${t('skills.months')}` },
+        { name: 'IntelliJ IDEA', progress: 90, experience: `13-14 ${t('skills.months')}` },
       ]
     }
   ]
@@ -71,7 +75,7 @@ export default function Skills({ isDarkMode }: SkillsProps) {
       <div className="max-w-6xl mx-auto px-4">
         <h2 className={`text-lg md:text-xl font-bold mb-3 md:mb-4 text-center animate-fade-in-up ${
           isDarkMode ? 'text-white' : 'text-gray-900'
-        }`}>Technické znalosti</h2>
+        }`}>{t('skills.title')}</h2>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
           {skillCategories.map((category, categoryIndex) => (

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Download, Github, Mail, Phone, X, Moon, Sun } from 'lucide-react'
 import emailjs from '@emailjs/browser'
+import { useLanguage } from '../contexts/LanguageContext'
 
 interface NavigationProps {
   activeSection: string
@@ -22,6 +23,7 @@ export default function Navigation({ activeSection, setActiveSection, isDarkMode
     message: ''
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const { language, setLanguage, t } = useLanguage()
 
   const showToast = (message: string, type: 'success' | 'error' = 'success') => {
     setToast({ message, type })
@@ -59,7 +61,7 @@ export default function Navigation({ activeSection, setActiveSection, isDarkMode
       // Odoslanie emailu cez EmailJS
       await emailjs.send(serviceId, templateId, templateParams, publicKey)
       
-      showToast('Správa bola úspešne odoslaná!')
+              showToast(t('contact.form.success'))
       
       // Reset formulára
       setFormData({
@@ -75,7 +77,7 @@ export default function Navigation({ activeSection, setActiveSection, isDarkMode
     } catch (error) {
       console.error('EmailJS Error:', error)
       const errorMessage = error instanceof Error ? error.message : 'Neznáma chyba'
-      showToast(`Chyba pri odosielaní správy: ${errorMessage}`, 'error')
+      showToast(`${t('contact.form.error')}: ${errorMessage}`, 'error')
     } finally {
       setIsSubmitting(false)
     }
@@ -124,27 +126,55 @@ export default function Navigation({ activeSection, setActiveSection, isDarkMode
             </span>
           </button>
 
-          {/* Action Buttons */}
-          <div className="flex items-center gap-1 md:gap-2">
-            {/* Dark Mode Toggle */}
-            <button
-              onClick={() => setIsDarkMode(!isDarkMode)}
-              className={`p-1.5 md:p-2 rounded-lg transition-all duration-300 ${
-                isDarkMode 
-                  ? 'bg-yellow-500 hover:bg-yellow-600 text-white' 
-                  : 'bg-slate-800 hover:bg-slate-700 text-white'
-              }`}
-            >
-              {isDarkMode ? <Sun className="w-3 h-3 md:w-4 md:h-4" /> : <Moon className="w-3 h-3 md:w-4 md:h-4" />}
-            </button>
+                  {/* Action Buttons */}
+                  <div className="flex items-center gap-1 md:gap-2">
+                    {/* Language Buttons */}
+                    <div className="flex gap-1">
+                      <button
+                        onClick={() => setLanguage('sk')}
+                        className={`px-2 py-1.5 md:px-3 md:py-2 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-rose-400 focus:ring-offset-2 text-xs md:text-sm ${
+                          language === 'sk'
+                            ? 'bg-gradient-to-r from-rose-500 via-pink-500 to-violet-600 hover:from-rose-600 hover:via-pink-600 hover:to-violet-700 text-white'
+                            : isDarkMode 
+                              ? 'bg-slate-700 hover:bg-slate-600 text-gray-300' 
+                              : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+                        }`}
+                      >
+                        SK
+                      </button>
+                      <button
+                        onClick={() => setLanguage('en')}
+                        className={`px-2 py-1.5 md:px-3 md:py-2 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-rose-400 focus:ring-offset-2 text-xs md:text-sm ${
+                          language === 'en'
+                            ? 'bg-gradient-to-r from-rose-500 via-pink-500 to-violet-600 hover:from-rose-600 hover:via-pink-600 hover:to-violet-700 text-white'
+                            : isDarkMode 
+                              ? 'bg-slate-700 hover:bg-slate-600 text-gray-300' 
+                              : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+                        }`}
+                      >
+                        EN
+                      </button>
+                    </div>
+                    
+                    {/* Dark Mode Toggle */}
+                    <button
+                      onClick={() => setIsDarkMode(!isDarkMode)}
+                      className={`p-1.5 md:p-2 rounded-lg transition-all duration-300 ${
+                        isDarkMode 
+                          ? 'bg-yellow-500 hover:bg-yellow-600 text-white' 
+                          : 'bg-slate-800 hover:bg-slate-700 text-white'
+                      }`}
+                    >
+                      {isDarkMode ? <Sun className="w-3 h-3 md:w-4 md:h-4" /> : <Moon className="w-3 h-3 md:w-4 md:h-4" />}
+                    </button>
             
             {/* Projekty */}
             <button
               onClick={() => scrollToSection('experience')}
               className="bg-gradient-to-r from-rose-500 via-pink-500 to-violet-600 hover:from-rose-600 hover:via-pink-600 hover:to-violet-700 text-white px-2 py-1.5 md:px-3 md:py-2 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-rose-400 focus:ring-offset-2 text-xs md:text-sm"
             >
-              <span className="hidden sm:inline">Projekty</span>
-              <span className="sm:hidden">Proj</span>
+              <span className="hidden sm:inline">{t('nav.projects')}</span>
+              <span className="sm:hidden">{t('nav.projects').substring(0, 4)}</span>
             </button>
             
             {/* GitHub */}
@@ -155,7 +185,7 @@ export default function Navigation({ activeSection, setActiveSection, isDarkMode
               className="bg-gradient-to-r from-rose-500 via-pink-500 to-violet-600 hover:from-rose-600 hover:via-pink-600 hover:to-violet-700 text-white px-2 py-1.5 md:px-3 md:py-2 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-rose-400 focus:ring-offset-2 flex items-center gap-1 text-xs md:text-sm"
             >
               <Github className="w-3 h-3 md:w-4 md:h-4" />
-              <span className="hidden sm:inline">GitHub</span>
+              <span className="hidden sm:inline">{t('nav.github')}</span>
             </a>
             
             {/* Kontakt */}
@@ -164,7 +194,7 @@ export default function Navigation({ activeSection, setActiveSection, isDarkMode
               className="bg-gradient-to-r from-rose-500 via-pink-500 to-violet-600 hover:from-rose-600 hover:via-pink-600 hover:to-violet-700 text-white px-2 py-1.5 md:px-3 md:py-2 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-rose-400 focus:ring-offset-2 flex items-center gap-1 text-xs md:text-sm"
             >
               <Mail className="w-3 h-3 md:w-4 md:h-4" />
-              <span className="hidden sm:inline">Kontakt</span>
+              <span className="hidden sm:inline">{t('nav.contact')}</span>
             </button>
             
             {/* Telefón */}
@@ -177,7 +207,7 @@ export default function Navigation({ activeSection, setActiveSection, isDarkMode
                 isPhoneFlipped ? 'opacity-0' : 'opacity-100'
               }`}>
                 <Phone className="w-3 h-3 md:w-4 md:h-4" />
-                <span className="hidden sm:inline">Telefón</span>
+                <span className="hidden sm:inline">{t('nav.phone')}</span>
               </div>
               
               {/* Back of card */}
@@ -200,10 +230,10 @@ export default function Navigation({ activeSection, setActiveSection, isDarkMode
         }`}>
           <div className="container mx-auto px-4 py-6">
             <div className="max-w-2xl mx-auto">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className={`text-lg font-semibold ${
-                  isDarkMode ? 'text-white' : 'text-gray-900'
-                }`}>Kontaktujte ma</h3>
+                      <div className="flex justify-between items-center mb-4">
+                        <h3 className={`text-lg font-semibold ${
+                          isDarkMode ? 'text-white' : 'text-gray-900'
+                        }`}>{t('nav.contact')}</h3>
                 <button
                   onClick={() => setIsContactOpen(false)}
                   className={`transition-colors ${
@@ -216,12 +246,12 @@ export default function Navigation({ activeSection, setActiveSection, isDarkMode
               
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="name" className={`block text-sm font-medium mb-1 ${
-                      isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                    }`}>
-                      Meno
-                    </label>
+                          <div>
+                            <label htmlFor="name" className={`block text-sm font-medium mb-1 ${
+                              isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                            }`}>
+                              {t('contact.form.name')}
+                            </label>
                     <input
                       type="text"
                       id="name"
@@ -234,16 +264,16 @@ export default function Navigation({ activeSection, setActiveSection, isDarkMode
                           ? 'bg-slate-700 border-slate-600 text-white placeholder-gray-400' 
                           : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
                       }`}
-                      placeholder="Vaše meno"
+                              placeholder={language === 'sk' ? 'Vaše meno' : 'Your name'}
                     />
                   </div>
                   
-                  <div>
-                    <label htmlFor="email" className={`block text-sm font-medium mb-1 ${
-                      isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                    }`}>
-                      Email
-                    </label>
+                          <div>
+                            <label htmlFor="email" className={`block text-sm font-medium mb-1 ${
+                              isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                            }`}>
+                              {t('contact.form.email')}
+                            </label>
                     <input
                       type="email"
                       id="email"
@@ -256,17 +286,17 @@ export default function Navigation({ activeSection, setActiveSection, isDarkMode
                           ? 'bg-slate-700 border-slate-600 text-white placeholder-gray-400' 
                           : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
                       }`}
-                      placeholder="vas@email.com"
+                              placeholder={language === 'sk' ? 'vas@email.com' : 'your@email.com'}
                     />
                   </div>
                 </div>
                 
-                <div>
-                  <label htmlFor="subject" className={`block text-sm font-medium mb-1 ${
-                    isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                  }`}>
-                    Predmet
-                  </label>
+                        <div>
+                          <label htmlFor="subject" className={`block text-sm font-medium mb-1 ${
+                            isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                          }`}>
+                            {t('contact.form.subject')}
+                          </label>
                   <input
                     type="text"
                     id="subject"
@@ -279,16 +309,16 @@ export default function Navigation({ activeSection, setActiveSection, isDarkMode
                         ? 'bg-slate-700 border-slate-600 text-white placeholder-gray-400' 
                         : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
                     }`}
-                    placeholder="Predmet správy"
+                            placeholder={language === 'sk' ? 'Predmet správy' : 'Message subject'}
                   />
                 </div>
                 
-                <div>
-                  <label htmlFor="message" className={`block text-sm font-medium mb-1 ${
-                    isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                  }`}>
-                    Správa
-                  </label>
+                        <div>
+                          <label htmlFor="message" className={`block text-sm font-medium mb-1 ${
+                            isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                          }`}>
+                            {t('contact.form.message')}
+                          </label>
                   <textarea
                     id="message"
                     name="message"
@@ -301,17 +331,17 @@ export default function Navigation({ activeSection, setActiveSection, isDarkMode
                         ? 'bg-slate-700 border-slate-600 text-white placeholder-gray-400' 
                         : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
                     }`}
-                    placeholder="Vaša správa..."
+                            placeholder={language === 'sk' ? 'Vaša správa...' : 'Your message...'}
                   ></textarea>
                 </div>
                 
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-offset-2"
-                >
-                  {isSubmitting ? 'Odosielam...' : 'Odoslať správu'}
-                </button>
+                        <button
+                          type="submit"
+                          disabled={isSubmitting}
+                          className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-offset-2"
+                        >
+                          {isSubmitting ? t('contact.form.submitting') : t('contact.form.submit')}
+                        </button>
               </form>
             </div>
           </div>

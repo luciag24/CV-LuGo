@@ -2,6 +2,7 @@
 
 import { ExternalLink, Github, Play, X } from 'lucide-react'
 import { useState } from 'react'
+import { useLanguage } from '../contexts/LanguageContext'
 
 interface ExperienceProps {
   isDarkMode: boolean
@@ -20,12 +21,13 @@ interface Project {
 }
 
 export default function Experience({ isDarkMode }: ExperienceProps) {
+  const { t } = useLanguage()
   const [selectedDemo, setSelectedDemo] = useState<string | null>(null)
 
   const projects: Project[] = [
     {
-      title: 'E-commerce Platform',
-      description: 'Moderná e-commerce platforma pre custom tlačové produkty s Directus CMS integráciou. Obsahuje katalóg produktov, nákupný košík, Stripe platby, Printful integráciu, automatickú synchronizáciu produktov a responzívny dizajn.',
+      title: t('projects.eshop.title'),
+      description: t('projects.eshop.description'),
       tags: ['Next.js', 'TypeScript', 'Directus CMS', 'Stripe', 'Printful', 'Tailwind CSS', 'Vercel'],
       languages: ['TypeScript', 'JavaScript', 'CSS'],
       image: '/images/eshop-placeholder.jpg',
@@ -35,8 +37,8 @@ export default function Experience({ isDarkMode }: ExperienceProps) {
       status: 'In Progress'
     },
     {
-      title: 'BottleLogic - Recyklačná aplikácia',
-      description: 'Konzolová aplikácia na recykláciu plastových fliaš a plechoviek vytvorená na prezentáciu OOP princípov. Implementuje 8 návrhových vzorov (Strategy, Factory, Builder, Command, Template Method, State, Visitor, Observer) a demonštruje pokročilé OOP koncepty s ASCII art rozhraním.',
+      title: t('projects.bottlelogic.title'),
+      description: t('projects.bottlelogic.description'),
       tags: ['Java', 'OOP', 'Design Patterns', 'Console Application', 'ASCII Art'],
       languages: ['Java'],
       image: '/images/bottlelogic.jpg',
@@ -46,8 +48,8 @@ export default function Experience({ isDarkMode }: ExperienceProps) {
       status: null
     },
     {
-      title: 'Pokročilá Matematická hra',
-      description: 'Matematická hra pre žiakov základných škôl s pokročilými funkciami: matematické príklady pre 1.-4. ročník, jednotkové prevody, zvukové efekty a sledovanie progresu. Webová aplikácia s moderným UI.',
+      title: t('projects.mathgame.title'),
+      description: t('projects.mathgame.description'),
       tags: ['Java', 'Spring Boot', 'MySQL', 'Maven', 'Docker', 'Web Application'],
       languages: ['Java', 'JavaScript', 'CSS', 'HTML', 'SQL'],
       image: '/images/math-game2.jpg',
@@ -57,8 +59,8 @@ export default function Experience({ isDarkMode }: ExperienceProps) {
       status: null
     },
     {
-      title: 'Godzilla Adventure Game',
-      description: 'Zábavná adventure hra s Godzilla tematikou. Obsahuje rôzne úrovne, boss battles, power-ups a moderné grafické efekty. Demonštruje game development skills a kreatívne riešenia.',
+      title: t('projects.godzilla.title'),
+      description: t('projects.godzilla.description'),
       tags: ['React', 'JavaScript', 'Game Development', 'CSS Animations', 'Creative Design'],
       languages: ['JavaScript', 'HTML/CSS'],
       image: '/images/kaijunoexryori.jpg',
@@ -82,7 +84,7 @@ export default function Experience({ isDarkMode }: ExperienceProps) {
       <div className="max-w-6xl mx-auto px-4">
         <h2 className={`text-lg md:text-xl font-bold mb-3 md:mb-4 text-center animate-fade-in-up ${
           isDarkMode ? 'text-white' : 'text-gray-900'
-        }`}>Projekty a skúsenosti</h2>
+        }`}>{t('experience.title')}</h2>
         
         <div className="grid sm:grid-cols-2 gap-2 md:gap-3">
           {projects.map((project, index) => (
@@ -180,7 +182,7 @@ export default function Experience({ isDarkMode }: ExperienceProps) {
                       className="bg-gradient-to-r from-rose-500 via-pink-500 to-violet-600 hover:from-rose-600 hover:via-pink-600 hover:to-violet-700 text-white flex items-center gap-1 flex-1 justify-center text-xs py-1 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-rose-400 focus:ring-offset-2"
                     >
                       <Play className="w-3 h-3" />
-                      Demo
+                      {t('experience.demo')}
                     </button>
                   )}
                   <a 
@@ -190,7 +192,7 @@ export default function Experience({ isDarkMode }: ExperienceProps) {
                     className="bg-gradient-to-r from-gray-500 via-gray-600 to-gray-700 hover:from-gray-600 hover:via-gray-700 hover:to-gray-800 text-white flex items-center gap-1 flex-1 justify-center text-xs py-1 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
                   >
                     <Github className="w-3 h-3" />
-                    Code
+                    {t('experience.code')}
                   </a>
                 </div>
               </div>

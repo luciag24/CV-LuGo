@@ -1,16 +1,20 @@
 'use client'
 
+import { useLanguage } from '../contexts/LanguageContext'
+
 interface AboutProps {
   isDarkMode: boolean
 }
 
 export default function About({ isDarkMode }: AboutProps) {
+  const { t } = useLanguage()
+  
   const softSkills = [
-    'Komunikačné zručnosti',
-    'Riešenie problémov',
-    'Spoľahlivosť',
-    'Kreativita',
-    'Vytrvalosť'
+    t('about.communication'),
+    t('about.problemSolving'),
+    t('about.reliability'),
+    t('about.creativity'),
+    t('about.perseverance')
   ]
 
   return (
@@ -21,12 +25,11 @@ export default function About({ isDarkMode }: AboutProps) {
           <div className="animate-fade-in-up">
             <h2 className={`text-lg md:text-xl font-bold mb-2 md:mb-3 ${
               isDarkMode ? 'text-white' : 'text-gray-900'
-            }`}>O mne</h2>
+            }`}>{t('about.title')}</h2>
             <p className={`text-xs md:text-sm mb-3 md:mb-4 ${
               isDarkMode ? 'text-gray-300' : 'text-gray-600'
             }`}>
-              Do IT ma priviedla vášeň pre riešenie problémov a možnosť tvoriť hodnotné riešenia. 
-              Postupne som vytvorila niekoľko funkčných aplikácií, ktoré mi priniesli nové skúsenosti.
+              {t('about.description')}
             </p>
           </div>
 
@@ -34,7 +37,7 @@ export default function About({ isDarkMode }: AboutProps) {
           <div className="animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
             <h3 className={`text-base md:text-lg font-semibold mb-2 md:mb-3 ${
               isDarkMode ? 'text-white' : 'text-gray-900'
-            }`}>Soft skills</h3>
+            }`}>{t('about.softSkills')}</h3>
             <div className="flex flex-wrap gap-1 md:gap-1.5">
               {softSkills.map((skill, index) => (
                 <span
