@@ -43,18 +43,7 @@ export default function Experience({ isDarkMode }: ExperienceProps) {
       languages: ['TypeScript', 'JavaScript', 'CSS'],
       image: '/images/eshop-placeholder.jpg',
       demoUrl: 'https://our-printshop687.vercel.app',
-      demos: [
-        {
-          url: '/demos/eshop-funkcie.mov',
-          label: 'Funkcie eshopu',
-          type: 'video'
-        },
-        {
-          url: '/demos/eshop-admin.mov',
-          label: 'Admin panel',
-          type: 'video'
-        }
-      ],
+      demoGif: '/demos/ecommerce-demo.gif',
       codeUrl: 'https://github.com/daasadr/our-printshop',
       status: null
     },
@@ -323,16 +312,49 @@ export default function Experience({ isDarkMode }: ExperienceProps) {
               
               <div className="relative">
                 {selectedDemoType === 'video' ? (
-                  <video
-                    src={selectedDemo}
-                    controls
-                    className="w-full h-auto max-h-[70vh] sm:max-h-[75vh] rounded-lg shadow-lg"
-                    autoPlay
-                    loop
-                    playsInline
-                  >
-                    Váš prehliadač nepodporuje video tag.
-                  </video>
+                  <>
+                    <video
+                      key={selectedDemo}
+                      src={selectedDemo}
+                      controls
+                      className="w-full h-auto max-h-[70vh] sm:max-h-[75vh] rounded-lg shadow-lg"
+                      autoPlay
+                      loop
+                      playsInline
+                      onError={(e) => {
+                        const target = e.target as HTMLVideoElement
+                        target.style.display = 'none'
+                        const errorDiv = document.getElementById('video-error-message')
+                        if (errorDiv) {
+                          errorDiv.classList.remove('hidden')
+                        }
+                      }}
+                      onCanPlay={() => {
+                        const errorDiv = document.getElementById('video-error-message')
+                        if (errorDiv) {
+                          errorDiv.classList.add('hidden')
+                        }
+                      }}
+                    >
+                      Váš prehliadač nepodporuje video tag.
+                    </video>
+                    {/* Error message for video */}
+                    <div 
+                      id="video-error-message"
+                      className={`hidden absolute inset-0 flex items-center justify-center rounded-lg ${
+                        isDarkMode ? 'bg-slate-700' : 'bg-gray-100'
+                      }`}
+                    >
+                      <div className={`text-center p-4 ${
+                        isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                      }`}>
+                        <p className="text-sm font-medium mb-2">Video sa nepodarilo načítať</p>
+                        <p className="text-xs opacity-75 mb-1">{selectedDemo}</p>
+                        <p className="text-xs opacity-75">Video súbor pravdepodobne nie je na serveri.</p>
+                        <p className="text-xs opacity-75 mt-2">Skontrolujte, či sú video súbory nahrané na Vercel.</p>
+                      </div>
+                    </div>
+                  </>
                 ) : (
                   <img
                     src={selectedDemo}
@@ -353,6 +375,7 @@ export default function Experience({ isDarkMode }: ExperienceProps) {
                   }`}>
                     <Play className="w-12 h-12 mx-auto mb-2 opacity-50" />
                     <p className="text-sm">Demo sa načítava...</p>
+                    <p className="text-xs mt-2 opacity-75">{selectedDemo}</p>
                   </div>
                 </div>
               </div>
