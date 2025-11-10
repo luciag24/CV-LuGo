@@ -64,7 +64,7 @@ const translations = {
     
     // Projects
     'projects.eshop.title': 'E-commerce Platform',
-    'projects.eshop.description': 'Moderná e-commerce platforma pre custom tlačové produkty s Directus CMS integráciou. Obsahuje katalóg produktov, nákupný košík, Stripe platby, Printful integráciu, automatickú synchronizáciu produktov a responzívny dizajn.',
+    'projects.eshop.description': 'Profesionálna e-commerce platforma navrhnutá pre globálny trh. Podporuje 3 jazyky (čeština, slovenčina, angličtina) a 3 kurzové meny (CZK, EUR, GBP), čím umožňuje zákazníkom z celého sveta nakupovať v ich rodnom jazyku a mene. Platforma obsahuje intuitívny katalóg produktov, bezpečné Stripe platby, automatickú synchronizáciu s Printful pre tlačové produkty a plne responzívny dizajn optimalizovaný pre všetky zariadenia. Ideálne riešenie pre podniky, ktoré chcú expandovať medzinárodne.',
     
     'projects.bottlelogic.title': 'BottleLogic - Recyklačná aplikácia',
     'projects.bottlelogic.description': 'Konzolová aplikácia na recykláciu plastových fliaš a plechoviek vytvorená na prezentáciu OOP princípov. Implementuje 8 návrhových vzorov (Strategy, Factory, Builder, Command, Template Method, State, Visitor, Observer) a demonštruje pokročilé OOP koncepty s ASCII art rozhraním.',
@@ -125,7 +125,7 @@ const translations = {
     
     // Projects
     'projects.eshop.title': 'E-commerce Platform',
-    'projects.eshop.description': 'Modern e-commerce platform for custom print products with Directus CMS integration. Includes product catalog, shopping cart, Stripe payments, Printful integration, automatic product synchronization and responsive design.',
+    'projects.eshop.description': 'Professional e-commerce platform designed for the global market. Supports 3 languages (Czech, Slovak, English) and 3 currencies (CZK, EUR, GBP), allowing customers worldwide to shop in their native language and currency. The platform features an intuitive product catalog, secure Stripe payments, automatic synchronization with Printful for print products, and a fully responsive design optimized for all devices. Perfect solution for businesses looking to expand internationally.',
     
     'projects.bottlelogic.title': 'BottleLogic - Recycling Application',
     'projects.bottlelogic.description': 'Console application for recycling plastic bottles and cans created to demonstrate OOP principles. Implements 8 design patterns (Strategy, Factory, Builder, Command, Template Method, State, Visitor, Observer) and demonstrates advanced OOP concepts with ASCII art interface.',

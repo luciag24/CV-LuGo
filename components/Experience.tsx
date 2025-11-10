@@ -1,11 +1,17 @@
 'use client'
 
-import { ExternalLink, Github, Play, X } from 'lucide-react'
+import { ExternalLink, Github, Play, X, ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import { useLanguage } from '../contexts/LanguageContext'
 
 interface ExperienceProps {
   isDarkMode: boolean
+}
+
+interface Demo {
+  url: string
+  label: string
+  type: 'video' | 'image'
 }
 
 interface Project {
@@ -16,6 +22,7 @@ interface Project {
   image: string
   demoUrl: string | null
   demoGif?: string
+  demos?: Demo[]
   codeUrl: string
   status: string | null
 }
@@ -23,6 +30,10 @@ interface Project {
 export default function Experience({ isDarkMode }: ExperienceProps) {
   const { t } = useLanguage()
   const [selectedDemo, setSelectedDemo] = useState<string | null>(null)
+  const [selectedDemoType, setSelectedDemoType] = useState<'video' | 'image'>('image')
+  const [selectedProjectDemos, setSelectedProjectDemos] = useState<Demo[] | null>(null)
+  const [selectedDemoIndex, setSelectedDemoIndex] = useState<number>(0)
+  const [expandedDescriptions, setExpandedDescriptions] = useState<Set<number>>(new Set())
 
   const projects: Project[] = [
     {
@@ -32,9 +43,20 @@ export default function Experience({ isDarkMode }: ExperienceProps) {
       languages: ['TypeScript', 'JavaScript', 'CSS'],
       image: '/images/eshop-placeholder.jpg',
       demoUrl: 'https://our-printshop687.vercel.app',
-      demoGif: '/demos/eshop-demo.gif',
+      demos: [
+        {
+          url: '/demos/eshop-funkcie.mov',
+          label: 'Funkcie eshopu',
+          type: 'video'
+        },
+        {
+          url: '/demos/eshop-admin.mov',
+          label: 'Admin panel',
+          type: 'video'
+        }
+      ],
       codeUrl: 'https://github.com/daasadr/our-printshop',
-      status: 'In Progress'
+      status: null
     },
     {
       title: t('projects.bottlelogic.title'),
@@ -71,12 +93,46 @@ export default function Experience({ isDarkMode }: ExperienceProps) {
     }
   ]
 
-  const openDemo = (demoGif: string) => {
-    setSelectedDemo(demoGif)
+  const openDemo = (project: Project) => {
+    if (project.demos && project.demos.length > 0) {
+      // Multiple demos - show first one and allow switching
+      setSelectedProjectDemos(project.demos)
+      setSelectedDemo(project.demos[0].url)
+      setSelectedDemoType(project.demos[0].type)
+      setSelectedDemoIndex(0)
+    } else if (project.demoGif) {
+      // Single demo GIF
+      setSelectedDemo(project.demoGif)
+      setSelectedDemoType('image')
+      setSelectedProjectDemos(null)
+      setSelectedDemoIndex(0)
+    }
   }
 
   const closeDemo = () => {
     setSelectedDemo(null)
+    setSelectedProjectDemos(null)
+    setSelectedDemoIndex(0)
+  }
+
+  const switchDemo = (index: number) => {
+    if (selectedProjectDemos && selectedProjectDemos[index]) {
+      setSelectedDemo(selectedProjectDemos[index].url)
+      setSelectedDemoType(selectedProjectDemos[index].type)
+      setSelectedDemoIndex(index)
+    }
+  }
+
+  const toggleDescription = (index: number) => {
+    setExpandedDescriptions(prev => {
+      const newSet = new Set(prev)
+      if (newSet.has(index)) {
+        newSet.delete(index)
+      } else {
+        newSet.add(index)
+      }
+      return newSet
+    })
   }
 
   return (
@@ -94,15 +150,15 @@ export default function Experience({ isDarkMode }: ExperienceProps) {
                 : 'bg-white border-gray-200'
             }`} style={{ animationDelay: `${index * 0.1}s` }}>
               {/* Project Image */}
-              <div className={`h-16 sm:h-20 md:h-24 relative overflow-hidden ${
+              <div className={`h-32 sm:h-40 md:h-48 relative overflow-hidden flex items-center justify-center ${
                 isDarkMode 
                   ? 'bg-gradient-to-br from-slate-700 to-slate-800' 
                   : 'bg-gradient-to-br from-gray-100 to-gray-200'
               }`}>
                 <img
-                  src={project.image}
+                  src={`${project.image}?v=${Date.now()}`}
                   alt={project.title}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
                     target.style.display = 'none';
@@ -129,11 +185,28 @@ export default function Experience({ isDarkMode }: ExperienceProps) {
                   {project.title}
                 </h3>
                 
-                <p className={`text-xs mb-2 line-clamp-2 ${
-                  isDarkMode ? 'text-gray-300' : 'text-gray-600'
-                }`}>
-                  {project.description}
-                </p>
+                {/* Description with toggle */}
+                <div className="mb-2">
+                  <button
+                    onClick={() => toggleDescription(index)}
+                    className={`w-full text-left flex items-start gap-2 group ${
+                      isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                    }`}
+                  >
+                    <p className={`text-xs flex-1 ${
+                      expandedDescriptions.has(index) ? '' : 'line-clamp-2'
+                    }`}>
+                      {project.description}
+                    </p>
+                    <div className={`flex-shrink-0 mt-0.5 transition-transform duration-200 ${
+                      expandedDescriptions.has(index) ? 'rotate-180' : ''
+                    }`}>
+                      <ChevronDown className={`w-3 h-3 ${
+                        isDarkMode ? 'text-gray-400 group-hover:text-gray-300' : 'text-gray-500 group-hover:text-gray-700'
+                      }`} />
+                    </div>
+                  </button>
+                </div>
 
                 {/* Languages */}
                 <div className="mb-2">
@@ -176,9 +249,9 @@ export default function Experience({ isDarkMode }: ExperienceProps) {
 
                 {/* Action Buttons */}
                 <div className="flex gap-1">
-                  {project.demoGif && (
+                  {(project.demoGif || (project.demos && project.demos.length > 0)) && (
                     <button
-                      onClick={() => openDemo(project.demoGif!)}
+                      onClick={() => openDemo(project)}
                       className="bg-gradient-to-r from-rose-500 via-pink-500 to-violet-600 hover:from-rose-600 hover:via-pink-600 hover:to-violet-700 text-white flex items-center gap-1 flex-1 justify-center text-xs py-1 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-rose-400 focus:ring-offset-2"
                     >
                       <Play className="w-3 h-3" />
@@ -203,39 +276,75 @@ export default function Experience({ isDarkMode }: ExperienceProps) {
 
       {/* Demo Modal */}
       {selectedDemo && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
-          <div className={`relative max-w-4xl max-h-[90vh] mx-4 rounded-lg shadow-2xl ${
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-2 sm:p-4">
+          <div className={`relative w-full max-w-4xl max-h-[95vh] sm:max-h-[90vh] rounded-lg shadow-2xl overflow-hidden ${
             isDarkMode ? 'bg-slate-800' : 'bg-white'
           }`}>
             {/* Close Button */}
             <button
               onClick={closeDemo}
-              className="absolute -top-2 -right-2 z-10 bg-red-500 hover:bg-red-600 text-white rounded-full p-2 shadow-lg transition-colors duration-200"
+              className="absolute top-2 right-2 sm:-top-2 sm:-right-2 z-10 bg-red-500 hover:bg-red-600 text-white rounded-full p-2 shadow-lg transition-colors duration-200"
             >
               <X className="w-4 h-4" />
             </button>
             
             {/* Demo Content */}
-            <div className="p-4">
-              <div className="text-center mb-4">
-                <h3 className={`text-lg font-bold ${
+            <div className="p-3 sm:p-4 md:p-6 overflow-y-auto max-h-[95vh] sm:max-h-[90vh]">
+              <div className="text-center mb-3 sm:mb-4">
+                <h3 className={`text-base sm:text-lg font-bold ${
                   isDarkMode ? 'text-white' : 'text-gray-900'
                 }`}>
                   Demo aplikácie
                 </h3>
               </div>
               
+              {/* Demo Tabs (if multiple demos) */}
+              {selectedProjectDemos && selectedProjectDemos.length > 1 && (
+                <div className="flex flex-wrap gap-2 mb-3 sm:mb-4 justify-center">
+                  {selectedProjectDemos.map((demo, index) => (
+                    <button
+                      key={index}
+                      onClick={() => switchDemo(index)}
+                      className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 ${
+                        selectedDemoIndex === index
+                          ? isDarkMode
+                            ? 'bg-violet-600 text-white'
+                            : 'bg-violet-500 text-white'
+                          : isDarkMode
+                            ? 'bg-slate-700 text-gray-300 hover:bg-slate-600'
+                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                      }`}
+                    >
+                      {demo.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+              
               <div className="relative">
-                <img
-                  src={selectedDemo}
-                  alt="Project Demo"
-                  className="w-full h-auto rounded-lg shadow-lg"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.style.display = 'none';
-                    target.nextElementSibling?.classList.remove('hidden');
-                  }}
-                />
+                {selectedDemoType === 'video' ? (
+                  <video
+                    src={selectedDemo}
+                    controls
+                    className="w-full h-auto max-h-[70vh] sm:max-h-[75vh] rounded-lg shadow-lg"
+                    autoPlay
+                    loop
+                    playsInline
+                  >
+                    Váš prehliadač nepodporuje video tag.
+                  </video>
+                ) : (
+                  <img
+                    src={selectedDemo}
+                    alt="Project Demo"
+                    className="w-full h-auto max-h-[70vh] sm:max-h-[75vh] rounded-lg shadow-lg object-contain"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                      target.nextElementSibling?.classList.remove('hidden');
+                    }}
+                  />
+                )}
                 <div className={`absolute inset-0 flex items-center justify-center hidden rounded-lg ${
                   isDarkMode ? 'bg-slate-700' : 'bg-gray-100'
                 }`}>
