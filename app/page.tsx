@@ -8,6 +8,7 @@ import Skills from '@/components/Skills'
 import Experience from '@/components/Experience'
 import Contact from '@/components/Contact'
 import AnimatedBackground from '@/components/AnimatedBackground'
+import ChristmasEffects from '@/components/ChristmasEffects'
 import { LanguageProvider } from '@/contexts/LanguageContext'
 
 export default function Home() {
@@ -22,6 +23,7 @@ export default function Home() {
           : 'bg-gradient-to-br from-rose-100 via-pink-50 to-violet-100'
       }`}>
         <AnimatedBackground />
+        <ChristmasEffects isDarkMode={isDarkMode} />
         
         <Navigation 
           activeSection={activeSection} 
